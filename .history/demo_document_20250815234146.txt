@@ -1,0 +1,41 @@
+# ContextForge Demo Document
+
+## Introduction
+This is a demonstration document for the ContextForge RAG system. The system is designed to process PDF documents, break them into intelligent chunks, and provide accurate answers with page-level citations.
+
+## Key Features
+- **PDF Processing**: Handles documents from small to 1000+ pages
+- **Intelligent Chunking**: Sentence-aware text chunking with configurable overlap
+- **Vector Search**: Qdrant-based vector storage with OpenAI embeddings
+- **Smart Retrieval**: Advanced document retrieval with deduplication
+- **Citation Support**: Page-level citations for all answers
+
+## How It Works
+1. **Document Upload**: PDF is uploaded via API
+2. **Processing**: Background worker parses, chunks, and embeds the document
+3. **Storage**: Chunks are stored in Qdrant with metadata
+4. **Query**: User asks a question
+5. **Retrieval**: System finds relevant chunks using vector similarity
+6. **Answer**: LLM generates response with citations
+
+## Technical Architecture
+- **Backend**: Python 3.11+, FastAPI, Uvicorn
+- **Database**: SQLite (metadata), Qdrant (vectors)
+- **Queue**: Redis + RQ for background processing
+- **Embeddings**: OpenAI text-embedding-3-small
+- **LLM**: OpenAI GPT models for answer generation
+
+## Use Cases
+- Document Q&A systems
+- Research assistance
+- Knowledge base queries
+- Legal document analysis
+- Academic paper review
+
+## Performance
+- Chunking: ~800 tokens per chunk with 100 token overlap
+- Embedding: Batch processing for efficiency
+- Search: Configurable top-K retrieval with deduplication
+- Response: Context-aware answer generation
+
+This document serves as a test case for demonstrating the ContextForge RAG system's capabilities in processing text and answering questions with proper citations.
