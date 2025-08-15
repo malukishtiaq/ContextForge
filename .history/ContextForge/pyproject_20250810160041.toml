@@ -1,0 +1,27 @@
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+select = ["E", "F", "I", "UP", "B", "SIM", "C90"]
+ignore = ["E501"]
+
+[project]
+name = "contextforge"
+version = "0.1.0"
+description = "ContextForge: Production-ready RAG core (FastAPI + Qdrant + Redis/RQ)"
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [{ name = "ContextForge" }]
+license = { text = "MIT" }
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+
+
