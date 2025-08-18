@@ -15,6 +15,11 @@ from app.services.vectorstore.qdrant_store import QdrantStore
 # ---------- Filesystem paths ----------
 
 
+def sanitize_namespace(doc_id: str) -> str:
+    """Sanitize document ID for use as Qdrant namespace (remove invalid characters)"""
+    return f"doc_{doc_id.replace('-', '_')}"
+
+
 def _ensure_parent(path: Path) -> Path:
     path.parent.mkdir(parents=True, exist_ok=True)
     return path

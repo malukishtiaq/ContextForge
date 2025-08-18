@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+import uuid
 from dataclasses import dataclass
 from typing import Literal
 
@@ -179,7 +180,7 @@ def chunk_pages(doc_id: str, pages: list[ParsedPage]) -> tuple[list[Chunk], dict
             
             chunks.append(
                 Chunk(
-                    id=f"{doc_id}:{page['page']}:{idx}",
+                    id=str(uuid.uuid4()),  # Generate unique UUID for each chunk
                     doc_id=doc_id,
                     page_start=page["page"],
                     page_end=page["page"],

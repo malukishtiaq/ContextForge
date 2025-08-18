@@ -7,9 +7,8 @@ from app.api.schemas.answers import AnswerRequest, AnswerResponse, Citation, Sni
 from app.core.config import settings
 from app.services.answerer.answerer import Answer, generate_answer
 from app.services.answerer.prompt import build_context, build_system_prompt
-from app.services.embeddings.openai_embedder import OpenAIEmbedder
+from app.deps import get_embedder, get_vectorstore, sanitize_namespace
 from app.services.retriever.retriever import Retriever
-from app.services.vectorstore.qdrant_store import QdrantStore
 
 router = APIRouter(prefix="/v1/answers", tags=["answers"])
 
@@ -19,15 +18,13 @@ def create_answer(req: AnswerRequest) -> AnswerResponse:
     if not req.docIds or len(req.docIds) != 1:
         raise HTTPException(http_status.HTTP_400_BAD_REQUEST, "Provide exactly one docId for MVP")
 
-    embedder = OpenAIEmbedder(
-        api_key=settings.openai_api_key,
-        base_url=settings.openai_base_url,
-        model=settings.embedding_model,
-    )
-    vs = QdrantStore(url=settings.qdrant_url, api_key=settings.qdrant_api_key)
+    embedder = get_embedder()
+    vs = get_vectorstore()
     retriever = Retriever(embedder=embedder, vectorstore=vs)
 
-    namespace = f"doc:{req.docIds[0]}"
+    # Sanitize the namespace for Qdrant (remove invalid characters)
+    doc_id = str(req.docIds[0])  # Convert UUID to string
+    namespace = sanitize_namespace(doc_id)
     top_k = req.topK or settings.top_k
     results = retriever.search(req.question, namespace=namespace, k=top_k, k_final=settings.top_k_final)
 

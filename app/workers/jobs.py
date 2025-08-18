@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 
 from app.core.config import settings
-from app.deps import blob_path, chunks_path, get_embedder, get_vectorstore, parsed_path
+from app.deps import blob_path, chunks_path, get_embedder, get_vectorstore, parsed_path, sanitize_namespace
 from app.db import repo
 from app.services.chunker.chunker import chunk_pages
 from app.services.parser.pdf_pymupdf import parse_pdf_pymupdf
@@ -42,7 +42,8 @@ def ingest(doc_id: str) -> None:
                     },
                 }
             )
-        vs.upsert(namespace=f"doc:{doc_id}", vectors=payloads)
+        namespace = sanitize_namespace(doc_id)
+        vs.upsert(namespace=namespace, vectors=payloads)
 
         repo.update_status(
             UUID(doc_id), status="ready", pages=meta.get("total_pages"), chunks=len(chunks)

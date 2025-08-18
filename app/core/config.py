@@ -35,8 +35,8 @@ class Settings(BaseSettings):
     max_context_tokens: int = 2000
     top_k: int = 10
     top_k_final: int = 6
-    sim_threshold_max: float = 0.30
-    sim_threshold_avg: float = 0.26
+    sim_threshold_max: float = 0.25
+    sim_threshold_avg: float = 0.20
     chunk_target_tokens: int = 800
     chunk_overlap_tokens: int = 100
 

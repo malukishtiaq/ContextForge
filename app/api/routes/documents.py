@@ -133,7 +133,8 @@ def delete_document(doc_id: UUID) -> dict:
 
     # purge vector namespace
     vs = get_vectorstore()
-    vs.delete_namespace(f"doc:{doc_id}")
+    namespace = sanitize_namespace(doc_id)
+    vs.delete_namespace(namespace)
 
     # remove files
     for p in [blob_path(str(doc_id)), parsed_path(str(doc_id)), chunks_path(str(doc_id))]:
